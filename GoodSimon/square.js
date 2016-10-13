@@ -8,6 +8,13 @@ var Square = function() {
     subscribers.push(subscriber);
   };
 
+  that.unsubscribe = function(subscriber) {
+    var index = subscribers.indexOf(subscriber);
+    if (index>-1) {
+      subscribers.splice(index, 1);
+    }
+  };
+
   var publishChanges = function() {
     subscribers.forEach(function(subscriber) { subscriber(); });
   };
