@@ -28,7 +28,7 @@ var Square = function() {
    * Notify a particular subscriber.
    * @param{function}
    */
-  that.publishChange = function(subscriber) {
+  var publishChange = function(subscriber) {
     var index = subscribers.indexOf(subscriber);
     if (index > -1) {
       subscribers[index]();
@@ -38,7 +38,7 @@ var Square = function() {
   /*
    * Notify all subscribers.
    */
-  that.publishChanges = function() {
+  var publishChanges = function() {
     subscribers.forEach(function(subscriber) { subscriber(); });
   };
 
