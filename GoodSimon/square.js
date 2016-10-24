@@ -1,6 +1,8 @@
-var Square = function() {
+var Square = function(x,y) {
   that = {};
   that = Object.create(Square.prototype);
+  var x = x;
+  var y = y;
   var value= 0;
   var subscribers = [];
 

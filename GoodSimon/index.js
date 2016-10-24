@@ -1,6 +1,7 @@
 (function() {
   document.addEventListener('DOMContentLoaded', function () {
-    SquareWidget($('#board'), Square());
+    //SquareWidget($('#board'), Square());
+    BoardWidget($('#board'), 10, 10);
     //BoardWidget();
     //$('.button').click(function() {
       //var type = $(this).id;
