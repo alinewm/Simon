@@ -1,6 +1,5 @@
-/*circle {*/
-  /*cx: 50px;*/
-  /*cy: 50px;*/
-  /*r: 40px;*/
-  /*fill: "transparent";*/
-/*}*/
+#board {
+	position: absolute;
+    width: 600px;
+    height: auto;
+}
