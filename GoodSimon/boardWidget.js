@@ -27,4 +27,12 @@ var BoardWidget = function(domContainer, board, rows, cols) {
     domContainer.append(row);
     jqueryBoard.push(jqueryRow);
   }
+  var lightUp = function(x, y) {
+    jqueryBoard[y][x].css("background-color", "green");
+  };
+
+  board.subscribe(function(x, y) {
+    lightUp(x, y);
+  });
+
 };

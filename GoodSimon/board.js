@@ -5,9 +5,15 @@ Create a Board object. A Board contains the locations of living cells.
 var Board = function(x, y) {
   that = {};
   that = Object.create(Board.prototype);
-  var grid = {};
+  var grid = new Array(y);
+  for (var i=0; i<y; i++) {
+    grid[i] = new Array(x);
+  }
   var subscribers = [];
 
+  that.getSize = function() {
+    return [x,y];
+  }
   /*
   Attach particular subscriber to a Board
   @param{function}
@@ -20,7 +26,7 @@ var Board = function(x, y) {
 
   @param{Integer, Integer}
   */
-  var publishChanges = function(x, y) {
+  that.publishChanges = function(x, y) {
     subscribers.forEach(function(subscriber) { subscriber(x,y); });
   }
   Object.freeze(that);
