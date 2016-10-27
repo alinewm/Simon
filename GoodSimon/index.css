@@ -1,5 +1,12 @@
+/*TO-DO: maintain width when resizing window*/
 #board {
 	position: absolute;
-    width: 600px;
-    height: auto;
+  /*width: 600px;*/
+  /*height: auto;*/
+}
+
+button {
+  display: block;
+  /*margin: auto;*/
+  margin-top: 10px;
 }

@@ -2,7 +2,7 @@
 Create a Board object. A Board contains the locations of living cells.
 @constructor
 */
-var Board = function() {
+var Board = function(x, y) {
   that = {};
   that = Object.create(Board.prototype);
   var grid = {};

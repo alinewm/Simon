@@ -2,7 +2,7 @@
  * Board comprises of many squares, each knowing its x and y coordinate.
  * As we create the jquery squares, we put them inside an array of references
  */
-var BoardWidget = function(domContainer, rows, cols) {
+var BoardWidget = function(domContainer, board, rows, cols) {
   var jqueryBoard = [];
 
   var Cell = function(xyList) {
@@ -16,10 +16,10 @@ var BoardWidget = function(domContainer, rows, cols) {
     return node;
   }
 
-  for(y=0; y<50; y++) {
+  for(y=0; y<cols; y++) {
     var row = $('<div>');
     var jqueryRow = [];
-    for(x=0; x<50; x++) {
+    for(x=0; x<rows; x++) {
       var cell = Cell([x, y]);
       row.append(cell);
       jqueryRow.push(cell);

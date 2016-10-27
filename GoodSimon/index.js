@@ -1,7 +1,19 @@
 (function() {
   document.addEventListener('DOMContentLoaded', function () {
-    var board = Board();
-    BoardWidget($('#board'), board);
+    $('button').click(function() {
+      var difficulty = $(this).attr('value');
+      if (difficulty==='easy') {
+        x = 3;
+      } else if (difficulty==='medium') {
+        x = 6;
+      } else {
+        x = 9;
+      }
+    var board = Board(x,x);
+    BoardWidget($('#board'), board, x, x);
+    $('#options').hide();
+    })
+
     //SquareWidget($('#board'), Square());
     //BoardWidget($('#board'), 10, 10);
     //BoardWidget();
