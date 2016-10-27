@@ -6,7 +6,7 @@ var Game = function() {
   that.start = function(board) {
     interval = setInterval(function() {
     that.step(board);
-    }, 400);
+    },2000);
   };
 
   that.stop = function() {

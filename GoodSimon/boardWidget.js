@@ -27,12 +27,21 @@ var BoardWidget = function(domContainer, board, rows, cols) {
     domContainer.append(row);
     jqueryBoard.push(jqueryRow);
   }
+
+  var turnOff = function(x, y) {
+    jqueryBoard[y][x].css("background-color", "white");
+  };
+
   var lightUp = function(x, y) {
     jqueryBoard[y][x].css("background-color", "green");
   };
 
+  /*
+   * Gotta pass anonymous fn to setTimeout otherwise it's executed immediately
+   */
   board.subscribe(function(x, y) {
     lightUp(x, y);
+    setTimeout(function() {turnOff(x, y);}, 1000);
   });
 
 };
