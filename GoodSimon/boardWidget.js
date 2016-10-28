@@ -35,13 +35,25 @@ var BoardWidget = function(domContainer, board, rows, cols) {
   var lightUp = function(x, y) {
     jqueryBoard[y][x].css("background-color", "green");
   };
+  var sleep = function(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
 
+  async function ex(coordinate) {
+      var x = coordinate[0];
+      var y = coordinate[1];
+      lightUp(x, y);
+      await sleep(1000);
+      turnOff(x,y);
+  }
   /*
    * Gotta pass anonymous fn to setTimeout otherwise it's executed immediately
    */
-  board.subscribe(function(x, y) {
-    lightUp(x, y);
-    setTimeout(function() {turnOff(x, y);}, 1000);
+  board.subscribe(function(coordinates) {
+    var interval;
+    //interval = setInterval(function() {
+    //}
+    coordinates.forEach(ex());
   });
 
 };
