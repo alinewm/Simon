@@ -12,6 +12,8 @@ var BoardWidget = function(domContainer, board, rows, cols) {
         "border": "1px solid black",
         "float": "left",
         "background-color": "white"
+    }).on('click', function() {
+      $(document).trigger('board:squareClicked', [xyList[0], xyList[1]]);
     });
     return node;
   }
@@ -35,25 +37,29 @@ var BoardWidget = function(domContainer, board, rows, cols) {
   var lightUp = function(x, y) {
     jqueryBoard[y][x].css("background-color", "green");
   };
-  var sleep = function(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
 
-  async function ex(coordinate) {
-      var x = coordinate[0];
-      var y = coordinate[1];
-      lightUp(x, y);
-      await sleep(1000);
-      turnOff(x,y);
+  var blink = function(coordinate, callback) {
+    var x = coordinate[0];
+    var y = coordinate[1];
+    lightUp(x, y);
+    console.log('blink: ' + x + ',' + y );
+    setTimeout(function() {
+      turnOff(x, y);
+      callback();}, 1000);
   }
+//pass index and increment index
+  var blinkList = function(coordinates) {
+    if(! _.isEmpty(coordinates)) {
+      blink(coordinates.shift(),
+           function() { blinkList(coordinates); });
+    }
+    };
+
   /*
    * Gotta pass anonymous fn to setTimeout otherwise it's executed immediately
    */
   board.subscribe(function(coordinates) {
-    var interval;
-    //interval = setInterval(function() {
-    //}
-    coordinates.forEach(ex());
+    blinkList(coordinates);
   });
 
 };

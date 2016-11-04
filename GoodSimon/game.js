@@ -4,10 +4,30 @@ var Game = function() {
   var sequence = [];
 
   that.start = function(board) {
-    interval = setInterval(function() {
     that.step(board);
-    },2000);
+    that.awaitUserAnswer(board);
   };
+
+  that.awaitUserAnswer = function(board) {
+    answer_sequence = _.clone(sequence);
+    $(document).on('board:squareClicked', function(e, x, y) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('clicked');
+      console.log([x, y]);
+
+      if(_.isEqual(answer_sequence[0], [x, y])) {
+        answer_sequence.shift();
+      } else {
+        console.log('game over!');
+      }
+
+      if(_.isEmpty(answer_sequence)) {
+        console.log('finished sequence!');
+        that.start(board);
+      }
+    });
+  }
 
   that.stop = function() {
     clearInterval(interval);
@@ -17,7 +37,6 @@ var Game = function() {
     var size = board.getSize();
     var x = Math.floor((Math.random() * size[0]));
     var y = Math.floor((Math.random() * size[1]));
-    console.log('chosen sq: ' + x + y);
     sequence.push([x,y]);
   }
   /*
@@ -25,8 +44,7 @@ var Game = function() {
    */
   that.step = function(board) {
     addMove(board);
-    board.publishChanges(sequence);
-    console.log('sequence over');
+    board.publishChanges(_.clone(sequence));
   };
   return that;
 };
