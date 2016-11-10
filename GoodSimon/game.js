@@ -10,20 +10,27 @@ var Game = function() {
 
   that.awaitUserAnswer = function(board) {
     answer_sequence = _.clone(sequence);
-    $(document).on('board:squareClicked', function(e, x, y) {
-      e.preventDefault();
-      e.stopPropagation();
+    $(".cell").on('board:squareClicked', function(e, x, y) {
+      //e.preventDefault();
+      //e.stopPropagation();
+      //
       console.log('clicked');
       console.log([x, y]);
 
+      board.publishChanges(_.clone(sequence), "red");
+
       if(_.isEqual(answer_sequence[0], [x, y])) {
         answer_sequence.shift();
+        console.log('good job!');
       } else {
+        console.log('answer_seq: ' + answer_sequence[0]);
+        $(".cell").off("board:squareClicked")
         console.log('game over!');
       }
 
       if(_.isEmpty(answer_sequence)) {
         console.log('finished sequence!');
+        $(".cell").off("board:squareClicked")
         that.start(board);
       }
     });
@@ -44,7 +51,7 @@ var Game = function() {
    */
   that.step = function(board) {
     addMove(board);
-    board.publishChanges(_.clone(sequence));
+    board.publishChanges(_.clone(sequence), "green");
   };
   return that;
 };

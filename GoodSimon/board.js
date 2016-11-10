@@ -26,8 +26,8 @@ var Board = function(x, y) {
 
   @param{Integer, Integer}
   */
-  that.publishChanges = function(coordinates) {
-    subscribers.forEach(function(subscriber) { subscriber(coordinates); });
+  that.publishChanges = function(coordinates, color) {
+    subscribers.forEach(function(subscriber) { subscriber(coordinates, color); });
   }
   Object.freeze(that);
   return that;
