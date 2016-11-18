@@ -13,7 +13,6 @@ var BoardWidget = function(domContainer, board, rows, cols) {
         "float": "left",
         "background-color": "white"
     }).click(function() {
-      blinkList([xyList], 0, "red");
       $(this).trigger('board:squareClicked', [xyList[0], xyList[1]]);
     });
     return node;
@@ -45,6 +44,7 @@ var BoardWidget = function(domContainer, board, rows, cols) {
 
 //pass index and increment index more efficient than shifting
   var blinkList = function(coordinates, i, color) {
+    console.log('blinkList args: ' + coordinates + ', ' + i + ', ' + color);
     setTimeout(function() {
       if(i < coordinates.length) {
         var coordinate = coordinates[i];
@@ -60,8 +60,8 @@ var BoardWidget = function(domContainer, board, rows, cols) {
   /*
    * Gotta pass anonymous fn to setTimeout otherwise it's executed immediately
    */
-  board.subscribe(function(coordinates) {
-    blinkList(coordinates, 0, "green");
+  board.subscribe(function(coordinates, color) {
+    blinkList(coordinates, 0, color);
   });
 
 };

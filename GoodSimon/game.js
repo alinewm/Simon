@@ -5,40 +5,38 @@ var Game = function() {
 
   that.start = function(board) {
     that.step(board);
-    that.awaitUserAnswer(board);
+    that.awaitUserAnswer(board, function() {that.start(board);});
   };
 
-  that.awaitUserAnswer = function(board) {
+  that.awaitUserAnswer = function(board, callback) {
     answer_sequence = _.clone(sequence);
     $(".cell").on('board:squareClicked', function(e, x, y) {
-      //e.preventDefault();
-      //e.stopPropagation();
-      //
       console.log('clicked');
       console.log([x, y]);
 
-      board.publishChanges(_.clone(sequence), "red");
+      //board.publishChanges([[x, y]], "red");
 
-      if(_.isEqual(answer_sequence[0], [x, y])) {
-        answer_sequence.shift();
-        console.log('good job!');
-      } else {
-        console.log('answer_seq: ' + answer_sequence[0]);
-        $(".cell").off("board:squareClicked")
-        console.log('game over!');
-      }
+      var cellRef = $(this);
+      $(this).css("background-color", "red");
+      setTimeout(function() {
+        cellRef.css("background-color", "white");
+        if(_.isEqual(answer_sequence[0], [x, y])) {
+          answer_sequence.shift();
+          console.log('good job!');
+        } else {
+          console.log('answer_seq: ' + answer_sequence[0]);
+          $(".cell").off("board:squareClicked");
+          console.log('game over!');
+        }
 
-      if(_.isEmpty(answer_sequence)) {
-        console.log('finished sequence!');
-        $(".cell").off("board:squareClicked")
-        that.start(board);
-      }
+        if(_.isEmpty(answer_sequence)) {
+          console.log('finished sequence!');
+          $(".cell").off("board:squareClicked");
+          callback();
+        }
+      }, 1000);
     });
   }
-
-  that.stop = function() {
-    clearInterval(interval);
-  };
 
   var addMove = function(board) {
     var size = board.getSize();
