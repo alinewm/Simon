@@ -9,11 +9,11 @@
       } else {
         x = 9;
       }
-    var board = Board(x,x);
-    BoardWidget($('#board'), board, x, x);
-    game = Game();
-    game.start(board);
-    $('#options').hide();
+      var board = Board(x,x);
+      BoardWidget($('#board'), board, x, x);
+      game = Game();
+      game.start(board);
+      $('#options').hide();
     })
 
     //SquareWidget($('#board'), Square());
