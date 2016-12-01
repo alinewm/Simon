@@ -3,6 +3,7 @@
  * As we create the jquery squares, we put them inside an array of references
  */
 var BoardWidget = function(domContainer, board, rows, cols) {
+  that = {};
   var jqueryBoard = [];
 
   var Cell = function(xyList) {
@@ -43,7 +44,7 @@ var BoardWidget = function(domContainer, board, rows, cols) {
   };
 
 //pass index and increment index more efficient than shifting
-  var blinkList = function(coordinates, i, color) {
+  that.blinkList = function(coordinates, i, color) {
     console.log('blinkList args: ' + coordinates + ', ' + i + ', ' + color);
     setTimeout(function() {
       if(i < coordinates.length) {
@@ -51,7 +52,7 @@ var BoardWidget = function(domContainer, board, rows, cols) {
         lightUp(coordinate, color);
         setTimeout(function() {
           turnOff(coordinate, color);
-          blinkList(coordinates, i+1, color);
+          that.blinkList(coordinates, i+1, color);
         }, 1000);
       }
     },1000);
@@ -61,7 +62,8 @@ var BoardWidget = function(domContainer, board, rows, cols) {
    * Gotta pass anonymous fn to setTimeout otherwise it's executed immediately
    */
   board.subscribe(function(coordinates, color) {
-    blinkList(coordinates, 0, color);
+    //blinkList(coordinates, 0, color);
   });
+  return that;
 
 };

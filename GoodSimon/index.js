@@ -10,8 +10,8 @@
         x = 9;
       }
       var board = Board(x,x);
-      BoardWidget($('#board'), board, x, x);
-      game = Game();
+      var boardWidget = BoardWidget($('#board'), board, x, x);
+      game = Game(boardWidget); //VERY BAD, REPLACE LATER
       game.start(board);
       $('#options').hide();
     })

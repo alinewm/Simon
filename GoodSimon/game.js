@@ -1,22 +1,28 @@
-var Game = function() {
+var Game = function(boardWidget) {
   that = {};
   var initialTime = null;
+  //setTimeout(that.tick.bind(that), 0);
   var sequence = [];
   var activeHandlers = false;
+  var widget = boardWidget;
 
   that.start = function(board) {
     that.step(board, function() {
-      that.awaitUserAnswer(board, function() {that.start(board);});
+      that.awaitUserAnswer(function() {that.start(board);});
     });
   };
 
+  /*
+   * Resets the game by refreshing the page
+   */
   that.restart = function() {
     alert('game over!');
     document.location.href = "";
   };
 
-  that.awaitUserAnswer = function(board, callback) {
-  //var timer = null;
+  that.awaitUserAnswer = function(callback) {
+    $('#timer').css('background-color', 'red');
+    //var timer = null;
     setTimeout(that.tick, 0);
     answer_sequence = _.clone(sequence);
 
@@ -24,8 +30,6 @@ var Game = function() {
     $(".cell").on('board:squareClicked', function(e, x, y) {
       console.log('clicked');
       console.log([x, y]);
-
-      //board.publishChanges([[x, y]], "red");
 
       var cellRef = $(this);
       cellRef.css("background-color", "red");
@@ -58,12 +62,16 @@ var Game = function() {
     var y = Math.floor((Math.random() * size[1]));
     sequence.push([x,y]);
   }
+
   /*
    * Lights up a square
    */
   that.step = function(board, callback) {
+    $('#timer').css('background-color', 'green');
     addMove(board);
-    board.publishChanges(_.clone(sequence), "green");
+    console.log(widget)
+    widget.blinkList(_.clone(sequence), 0, "green")
+    //board.publishChanges(_.clone(sequence), "green");
     callback();
   };
 
