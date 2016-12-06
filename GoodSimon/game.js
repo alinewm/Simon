@@ -3,10 +3,15 @@ var Game = function(boardWidget) {
   var initialTime = null;
   //setTimeout(that.tick.bind(that), 0);
   var sequence = [];
-  var activeHandlers = false;
+  //var activeHandlers = false;
   var widget = boardWidget;
+  var timer = false;
 
+  that.getWidget = function() {
+    return widget;
+  }
   that.start = function(board) {
+    setTimeout(that.tick, 0);
     that.step(board, function() {
       that.awaitUserAnswer(function() {that.start(board);});
     });
@@ -20,14 +25,20 @@ var Game = function(boardWidget) {
     document.location.href = "";
   };
 
+  /*
+   * Click handlers go on and off as player's turn starts and ends
+   * Handler needs to be constantly updated, otherwise uses old info
+   */
   that.awaitUserAnswer = function(callback) {
+    console.log('started user mode');
     $('#timer').css('background-color', 'red');
-    //var timer = null;
-    setTimeout(that.tick, 0);
+    timer = true;
+    //setTimeout(that.tick, 0);
     answer_sequence = _.clone(sequence);
 
-    if (!activeHandlers) {
+    activeHandlers = true;
     $(".cell").on('board:squareClicked', function(e, x, y) {
+      //if (activeHandlers) {
       console.log('clicked');
       console.log([x, y]);
 
@@ -40,20 +51,21 @@ var Game = function(boardWidget) {
           console.log('good job!');
         } else {
           console.log('answer_seq: ' + answer_sequence[0]);
-          //$(".cell").off("board:squareClicked");
           that.restart();
         }
 
         if(_.isEmpty(answer_sequence)) {
+          timer = false;
+          initialTime = null;
           console.log('finished sequence!');
-          //$(".cell").off("board:squareClicked");
+          console.log('finished user mode');
+          $(".cell").off("board:squareClicked");
+          //activeHandlers = false;
           callback();
         }
       }, 500);
+      //}
     });
-    activeHandlers = true;
-    }
-    initialTime = null;
   }
 
   var addMove = function(board) {
@@ -67,34 +79,38 @@ var Game = function(boardWidget) {
    * Lights up a square
    */
   that.step = function(board, callback) {
+    console.log('started computer mode');
     $('#timer').css('background-color', 'green');
     addMove(board);
-    console.log(widget)
-    widget.blinkList(_.clone(sequence), 0, "green")
+    widget.blinkList(_.clone(sequence), 0, "green", callback);
     //board.publishChanges(_.clone(sequence), "green");
-    callback();
   };
 
   that.tick = function() {
-    var timeNow = Date.now();
+    if (timer) {
+      var timeNow = Date.now();
 
-    // On the first tick delta time should be 0.
-    //var deltaTime = timeNow - (timer || timeNow);
-    if (initialTime) {
-      var deltaTime = (timeNow - initialTime);
-    } else {
-      initialTime = timeNow;
-      var deltaTime = 0;
-    }
-    var seconds = (Math.floor(deltaTime/1000));
-    var countdown = 10-seconds;
-    if (countdown == 0) {
-      that.restart();
-    } else {
+      // On the first tick delta time should be 0.
+      //var deltaTime = timeNow - (timer || timeNow);
+      if (initialTime) {
+        var deltaTime = (timeNow - initialTime);
+      } else {
+        initialTime = timeNow;
+        var deltaTime = 0;
+      }
+      var seconds = (Math.floor(deltaTime/1000));
+
+      var countdown = 10-seconds;
       that.draw(countdown);
+      if (countdown == 0) {
+        that.restart();
+      }
+      // Schedule this.tick to be invoked again
+      //var again = setTimeout(that.tick, 1000);
+    } else {
+      that.draw("computer's turn");
     }
-    // Schedule this.tick to be invoked again
-    setTimeout(that.tick, 1000);
+    var again = setTimeout(that.tick, 1000);
   };
 
   that.draw = function(deltaTime) {

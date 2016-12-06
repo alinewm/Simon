@@ -44,7 +44,7 @@ var BoardWidget = function(domContainer, board, rows, cols) {
   };
 
 //pass index and increment index more efficient than shifting
-  that.blinkList = function(coordinates, i, color) {
+  that.blinkList = function(coordinates, i, color, callback) {
     console.log('blinkList args: ' + coordinates + ', ' + i + ', ' + color);
     setTimeout(function() {
       if(i < coordinates.length) {
@@ -52,8 +52,11 @@ var BoardWidget = function(domContainer, board, rows, cols) {
         lightUp(coordinate, color);
         setTimeout(function() {
           turnOff(coordinate, color);
-          that.blinkList(coordinates, i+1, color);
+          that.getWidget().blinkList(coordinates, i+1, color, callback);
         }, 1000);
+      } else {
+        console.log('finished computer mode');
+        callback();
       }
     },1000);
     };
